@@ -39,7 +39,7 @@ export default function FollowingPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="bg-gradient-to-r from-orange-500 to-blue-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Users className="text-white" size={40} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -64,7 +64,7 @@ export default function FollowingPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-8">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-3 rounded-lg">
+              <div className="bg-gradient-to-r from-orange-500 to-blue-900 p-3 rounded-lg">
                 <Heart className="text-white" size={32} />
               </div>
               <div>

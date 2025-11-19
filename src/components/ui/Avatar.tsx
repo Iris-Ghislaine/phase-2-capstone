@@ -29,7 +29,7 @@ export function Avatar({ src, alt = 'User avatar', size = 'md', className }: Ava
           className="object-cover"
         />
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-green-400 to-emerald-600">
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-400 to-blue-900">
           <User className="text-white" size={size === 'sm' ? 16 : size === 'md' ? 20 : size === 'lg' ? 24 : 32} />
         </div>
       )}

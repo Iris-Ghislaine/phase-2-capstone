@@ -43,8 +43,8 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -66,21 +66,29 @@ async function fetchUserPosts(username: string) {
   return res.json();
 }
 
-export default function ProfilePage({ params }: { params: { username: string } }) {
+export default function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { data: session } = useSession();
-  const { data: user, isLoading: userLoading } = useQuery(
-    ['user', params.username],
-    () => fetchUser(params.username)
-  );
-  const { data: posts, isLoading: postsLoading } = useQuery(
-    ['userPosts', params.username],
-    () => fetchUserPosts(params.username)
-  );
+  const [username, setUsername] = useState<string>('');
+  
+  useEffect(() => {
+    params.then((p) => setUsername(p.username));
+  }, [params]);
+
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: ['user', username],
+    queryFn: () => fetchUser(username),
+    enabled: !!username,
+  });
+  const { data: posts, isLoading: postsLoading } = useQuery({
+    queryKey: ['userPosts', username],
+    queryFn: () => fetchUserPosts(username),
+    enabled: !!username,
+  });
   const { mutate: toggleFollow } = useToggleFollow();
 
   const [activeTab, setActiveTab] = useState<'posts' | 'about'>('posts');
 
-  if (userLoading) {
+  if (!username || userLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Spinner size="lg" />
@@ -96,7 +104,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
     );
   }
 
-  const isOwnProfile = session && (session.user as any)?.username === params.username;
+  const isOwnProfile = session && (session.user as any)?.username === username;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,11 +130,11 @@ export default function ProfilePage({ params }: { params: { username: string } }
                   </Button>
                 ) : (
                   <Button
-                    variant="primary"
+                    variant={user.isFollowing ? "outline" : "primary"}
                     size="sm"
                     onClick={() => toggleFollow(user.id)}
                   >
-                    Follow
+                    {user.isFollowing ? 'Following' : 'Follow'}
                   </Button>
                 )}
               </div>
@@ -165,7 +173,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
               onClick={() => setActiveTab('posts')}
               className={`pb-4 font-medium transition-colors ${
                 activeTab === 'posts'
-                  ? 'text-green-600 border-b-2 border-green-600'
+                  ? 'text-orange-600 border-b-2 border-orange-600'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -175,7 +183,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
               onClick={() => setActiveTab('about')}
               className={`pb-4 font-medium transition-colors ${
                 activeTab === 'about'
-                  ? 'text-green-600 border-b-2 border-green-600'
+                  ? 'text-orange-600 border-b-2 border-orange-600'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >

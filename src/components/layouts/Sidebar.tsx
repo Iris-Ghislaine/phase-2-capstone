@@ -17,7 +17,7 @@ export function Sidebar() {
       {/* Trending Topics */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="text-green-600" size={20} />
+          <TrendingUp className="text-orange-600" size={20} />
           <h2 className="font-bold text-gray-900">Trending Topics</h2>
         </div>
         <div className="space-y-3">
@@ -28,8 +28,8 @@ export function Sidebar() {
               className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors group"
             >
               <div className="flex items-center gap-2">
-                <Tag size={16} className="text-gray-400 group-hover:text-green-600 transition-colors" />
-                <span className="font-medium text-gray-700 group-hover:text-green-600 transition-colors">
+                <Tag size={16} className="text-gray-400 group-hover:text-orange-600 transition-colors" />
+                <span className="font-medium text-gray-700 group-hover:text-orange-600 transition-colors">
                   {topic.name}
                 </span>
               </div>
@@ -47,7 +47,7 @@ export function Sidebar() {
             <Link
               key={topic}
               href={`/tag/${topic.toLowerCase()}`}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-green-100 hover:text-green-700 transition-colors"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-orange-100 hover:text-orange-700 transition-colors"
             >
               {topic}
             </Link>

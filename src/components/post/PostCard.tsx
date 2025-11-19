@@ -46,7 +46,7 @@ export function PostCard({ post, variant = 'default' }: PostCardProps) {
                   <p className="text-sm text-gray-300">{formatDate(post.createdAt)}</p>
                 </div>
               </div>
-              <h2 className="text-3xl font-bold mb-3 line-clamp-2 group-hover:text-green-400 transition-colors">
+              <h2 className="text-3xl font-bold mb-3 line-clamp-2 group-hover:text-orange-400 transition-colors">
                 {post.title}
               </h2>
               {post.excerpt && (
@@ -81,7 +81,7 @@ export function PostCard({ post, variant = 'default' }: PostCardProps) {
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-green-600 transition-colors">
+            <h3 className="font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-orange-600 transition-colors">
               {post.title}
             </h3>
             <div className="flex items-center gap-3 text-sm text-gray-500">
@@ -121,7 +121,7 @@ export function PostCard({ post, variant = 'default' }: PostCardProps) {
           </div>
 
           {/* Title */}
-          <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-green-600 transition-colors">
+          <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
             {post.title}
           </h2>
 

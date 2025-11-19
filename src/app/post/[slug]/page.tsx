@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,9 +15,15 @@ import { Spinner } from '@/components/ui/Spinner';
 import { formatDate, readingTime } from '../../../lib/utils';
 import { useToggleFollow } from '../../../hooks/UseFollow';
 
-export default function PostPage({ params }: { params: { slug: string } }) {
+export default function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { data: session } = useSession();
-  const { data: post, isLoading } = usePost(params.slug);
+  const [slug, setSlug] = useState<string>('');
+  
+  useEffect(() => {
+    params.then((p) => setSlug(p.slug));
+  }, [params]);
+
+  const { data: post, isLoading } = usePost(slug);
   const { mutate: toggleFollow } = useToggleFollow();
 
   if (isLoading) {
@@ -70,7 +76,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
               </Link>
               <div>
                 <Link href={`/profile/${post.author.username}`}>
-                  <p className="font-semibold text-gray-900 hover:text-green-600 transition-colors">
+                  <p className="font-semibold text-gray-900 hover:text-orange-600 transition-colors">
                     {post.author.name}
                   </p>
                 </Link>

@@ -38,16 +38,16 @@ export function TagInput({ value, onChange, maxTags = 5 }: TagInputProps) {
       <label className="block text-sm font-medium text-gray-700">
         Tags (up to {maxTags})
       </label>
-      <div className="flex flex-wrap gap-2 p-3 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-green-500 focus-within:border-transparent">
+      <div className="flex flex-wrap gap-2 p-3 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-orange-500 focus-within:border-transparent">
         {value.map((tag, index) => (
           <div
             key={index}
-            className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm"
+            className="flex items-center gap-1 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm"
           >
             <span>{tag}</span>
             <button
               onClick={() => removeTag(index)}
-              className="hover:bg-green-200 rounded-full p-0.5"
+              className="hover:bg-orange-200 rounded-full p-0.5"
             >
               <X size={14} />
             </button>

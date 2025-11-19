@@ -61,13 +61,13 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-blue-50 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
         <Link href="/" className="flex items-center justify-center gap-2 mb-8">
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-3 rounded-lg">
+          <div className="bg-gradient-to-r from-orange-600 to-blue-900 p-3 rounded-lg">
             <BookOpen className="text-white" size={32} />
           </div>
-          <span className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+          <span className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-blue-900 bg-clip-text text-transparent">
             Medium
           </span>
         </Link>
@@ -118,7 +118,7 @@ export default function SignupPage() {
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Already have an account?{' '}
-              <Link href="/login" className="text-green-600 font-medium hover:text-green-700">
+              <Link href="/login" className="text-orange-600 font-medium hover:text-orange-700">
                 Sign in
               </Link>
             </p>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/Input';
@@ -27,15 +27,65 @@ export default function SettingsPage() {
     avatar: session.user?.image || '',
   });
 
+  // Fetch user data on mount to populate bio
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const username = (session.user as any)?.username;
+      if (!username) return;
+
+      try {
+        const res = await fetch(`/api/users/${username}`);
+        if (res.ok) {
+          const userData = await res.json();
+          setFormData(prev => ({
+            ...prev,
+            bio: userData.bio || '',
+            avatar: userData.avatar || session.user?.image || '',
+            name: userData.name || session.user?.name || '',
+          }));
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    if (session) {
+      fetchUserData();
+    }
+  }, [session]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const username = (session.user as any)?.username;
+      if (!username) {
+        toast.error('Username not found');
+        setIsLoading(false);
+        return;
+      }
+
+      const res = await fetch(`/api/users/${username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || 'Failed to update settings');
+        return;
+      }
+
       toast.success('Settings updated successfully!');
+      router.refresh();
+    } catch (error) {
+      toast.error('Something went wrong');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

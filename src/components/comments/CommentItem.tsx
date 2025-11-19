@@ -106,7 +106,7 @@ export function CommentItem({
           {session && depth < maxDepth && (
             <button
               onClick={() => onReply(comment.id)}
-              className="flex items-center gap-2 text-sm text-gray-500 hover:text-green-600 transition-colors"
+              className="flex items-center gap-2 text-sm text-gray-500 hover:text-orange-600 transition-colors"
             >
               <MessageCircle size={16} />
               Reply

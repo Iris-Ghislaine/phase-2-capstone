@@ -92,11 +92,11 @@
 //       ) : (
 //         <div
 //           onClick={() => fileInputRef.current?.click()}
-//           className="relative w-full h-64 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all"
+//           className="relative w-full h-64 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all"
 //         >
 //           {isUploading ? (
 //             <>
-//               <Loader2 className="w-12 h-12 text-green-600 animate-spin mb-4" />
+//               <Loader2 className="w-12 h-12 text-orange-600 animate-spin mb-4" />
 //               <p className="text-gray-600">Uploading...</p>
 //             </>
 //           ) : (
@@ -212,11 +212,11 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
       ) : (
         <div
           onClick={() => fileInputRef.current?.click()}
-          className="relative w-full h-64 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition-all"
+          className="relative w-full h-64 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-orange-500 hover:bg-orange-50 transition-all"
         >
           {isUploading ? (
             <>
-              <Loader2 className="w-12 h-12 text-green-600 animate-spin mb-4" />
+              <Loader2 className="w-12 h-12 text-orange-600 animate-spin mb-4" />
               <p className="text-gray-600">Uploading...</p>
             </>
           ) : (

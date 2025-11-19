@@ -20,7 +20,10 @@ export function useToggleFollow() {
   return useMutation({
     mutationFn: toggleFollow,
     onSuccess: (data, userId) => {
-      queryClient.invalidateQueries({ queryKey: ['user', userId] });
+      // Invalidate user queries by username pattern
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: ['posts', 'following'] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
       toast.success(data.following ? 'Followed successfully!' : 'Unfollowed');
     },
     onError: () => {

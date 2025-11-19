@@ -11,7 +11,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-lg">
+              <div className="bg-gradient-to-r from-orange-500 to-blue-900 p-2 rounded-lg">
                 <BookOpen className="text-white" size={24} />
               </div>
               <span className="text-xl font-bold">Rema-Blog</span>

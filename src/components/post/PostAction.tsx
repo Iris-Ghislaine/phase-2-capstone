@@ -66,7 +66,7 @@ export function PostActions({ post, isAuthor }: PostActionsProps) {
             <span className="font-medium">{post._count?.likes || 0}</span>
           </button>
 
-          <button className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
+          <button className="flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors">
             <MessageCircle size={24} />
             <span className="font-medium">{post._count?.comments || 0}</span>
           </button>

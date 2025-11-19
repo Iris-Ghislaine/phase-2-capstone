@@ -14,7 +14,7 @@ export default function LatestFeedPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-8">
-              <Clock className="text-green-600" size={32} />
+              <Clock className="text-orange-600" size={32} />
               <h1 className="text-4xl font-bold text-gray-900">Latest Posts</h1>
             </div>
             <PostList posts={posts || []} isLoading={isLoading} />

@@ -19,16 +19,16 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-600 to-emerald-600 text-white py-20">
+      <section className="bg-gradient-to-r from-orange-600 to-blue-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-5xl font-bold mb-6">
               Stay curious.
             </h1>
-            <p className="text-xl text-green-100 mb-8">
+            <p className="text-xl text-orange-100 mb-8">
               Discover stories, thinking, and expertise from writers on any topic.
             </p>
-            <button className="bg-white text-green-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+            <button className="bg-white text-orange-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
               Start reading
             </button>
           </div>
@@ -51,7 +51,7 @@ export default function HomePage() {
                     onClick={() => setFilter(f.id as any)}
                     className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors ${
                       filter === f.id
-                        ? 'text-green-600 border-b-2 border-green-600'
+                        ? 'text-orange-600 border-b-2 border-orange-600'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
