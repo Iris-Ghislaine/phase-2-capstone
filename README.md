@@ -286,7 +286,6 @@ CLOUDINARY_API_SECRET    # For server-side uploads
 # home page before logging in
 
 ![alt text](public/image-3.png)
-![alt text](public/image-1.png)
 
 # Sign In
 
