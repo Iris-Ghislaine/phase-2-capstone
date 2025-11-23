@@ -96,16 +96,6 @@ export default function PostPage({ params }: { params: Promise<{ slug: string }>
               </Button>
             )}
           </div>
-{/* 
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {post.tags.map((tag) => (
-                <Link key={tag.id} href={`/tag/${tag.slug}`}>
-                  <Badge variant="primary">{tag.name}</Badge>
-                </Link>
-              ))}
-            </div>
-          )} */}
         </header>
 
         
