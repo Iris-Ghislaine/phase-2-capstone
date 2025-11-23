@@ -3,7 +3,6 @@
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { Upload, X, Loader2 } from 'lucide-react';
-import { uploadToCloudinary } from '@/lib/cloudinary';
 import { useToast } from '@/context/ToastContext';
 
 interface ImageUploadProps {
@@ -29,7 +28,7 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
       return;
     }
 
-    // Validate file size (max 10MB for Cloudinary)
+    // Validate file size (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error('Image size should be less than 10MB');
       return;
@@ -37,8 +36,8 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
 
     try {
       setIsUploading(true);
-      setUploadProgress(20);
-      
+      setUploadProgress(10);
+
       // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -46,16 +45,30 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
       };
       reader.readAsDataURL(file);
 
-      setUploadProgress(40);
+      setUploadProgress(30);
 
-      // Upload to Cloudinary
-      const result = await uploadToCloudinary(file);
-      
+      // Upload to API
+      const formData = new FormData();
+      formData.append('file', file);
+
+      setUploadProgress(50);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
       setUploadProgress(80);
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+      }
+
+      const data = await response.json();
       
-      onChange(result.secure_url);
+      onChange(data.url);
       toast.success('Image uploaded successfully!');
-      
       setUploadProgress(100);
     } catch (error) {
       console.error('Upload error:', error);
@@ -63,7 +76,7 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
       setPreview(null);
     } finally {
       setIsUploading(false);
-      setUploadProgress(0);
+      setTimeout(() => setUploadProgress(0), 1000);
     }
   };
 
@@ -82,7 +95,7 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
           {label}
         </label>
       )}
-      
+
       {preview ? (
         <div className="relative w-full h-64 rounded-xl overflow-hidden border-2 border-gray-200 group">
           <Image
@@ -93,6 +106,7 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center">
             <button
+              type="button"
               onClick={handleRemove}
               disabled={isUploading}
               className="opacity-0 group-hover:opacity-100 transition-opacity bg-red-600 text-white p-3 rounded-full hover:bg-red-700 disabled:opacity-50"
@@ -109,13 +123,14 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
           {isUploading ? (
             <>
               <Loader2 className="w-12 h-12 text-orange-600 animate-spin mb-4" />
-              <p className="text-gray-600 mb-2">Uploading...</p>
-              <div className="w-64 bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-orange-600 h-2 rounded-full transition-all"
+              <p className="text-gray-600 mb-2">Uploading to Cloudinary...</p>
+              <div className="w-64 bg-gray-200 rounded-full h-2.5">
+                <div
+                  className="bg-orange-600 h-2.5 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
+              <p className="text-xs text-gray-500 mt-2">{uploadProgress}%</p>
             </>
           ) : (
             <>
@@ -123,9 +138,7 @@ export function ImageUpload({ value, onChange, label }: ImageUploadProps) {
               <p className="text-gray-600 font-medium mb-1">
                 Click to upload cover image
               </p>
-              <p className="text-sm text-gray-400">
-                PNG, JPG, WEBP up to 10MB
-              </p>
+              <p className="text-sm text-gray-400">PNG, JPG, WEBP up to 10MB</p>
             </>
           )}
         </div>
