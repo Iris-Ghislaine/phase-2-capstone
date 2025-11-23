@@ -81,7 +81,7 @@ export default function ProfilePage({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white ">
         <div className="max-w-5xl mx-auto px-4 py-12">
           <div className="flex items-start gap-8">
             <Avatar src={user.avatar} size="xl" />
@@ -149,7 +149,7 @@ export default function ProfilePage({
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-8 mt-8 border-b">
+          <div className="flex gap-8 mt-8">
             <button
               onClick={() => setActiveTab('posts')}
               className={`pb-4 font-medium transition-colors ${
@@ -158,7 +158,7 @@ export default function ProfilePage({
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              Posts ({user._count.posts})
+              Posts 
             </button>
             <button
               onClick={() => setActiveTab('about')}
