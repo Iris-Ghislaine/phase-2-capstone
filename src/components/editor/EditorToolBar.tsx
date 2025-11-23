@@ -23,14 +23,6 @@ export function EditorToolbar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onPreview}
-            >
-              <Eye size={18} className="mr-2" />
-              Preview
-            </Button>
           </div>
 
           <div className="flex items-center gap-3">

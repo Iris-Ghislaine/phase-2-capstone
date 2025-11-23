@@ -1,25 +1,28 @@
-
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../../lib/prisma';
 
-// This GET function fetches all published posts for a SPECIFIC user.
 export async function GET(
   request: Request,
-  { params }: { params: { username: string } }
+  { params }: { params: Promise<{ username: string }> }
 ) {
   try {
-    const { username } = params;
+    const { username } = await params;
 
-    // Find all posts where the author's username matches the one from the URL
+    // Find user first
+    const user = await prisma.user.findUnique({
+      where: { username },
+      select: { id: true },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Get only published posts for this specific user
     const posts = await prisma.post.findMany({
       where: {
-        published: true,
-        author: {
-          username: username,
-        },
-      },
-      orderBy: {
-        publishedAt: 'desc',
+        authorId: user.id,
+        published: true, // Only show published posts
       },
       include: {
         author: {
@@ -38,11 +41,14 @@ export async function GET(
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return NextResponse.json(posts);
   } catch (error) {
-    console.error("Fetch user's posts error:", error);
+    console.error('Fetch user posts error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
