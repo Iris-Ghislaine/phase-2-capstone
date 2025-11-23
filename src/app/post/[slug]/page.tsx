@@ -82,8 +82,6 @@ export default function PostPage({ params }: { params: Promise<{ slug: string }>
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <span>{formatDate(post.publishedAt || post.createdAt)}</span>
-                  <span>·</span>
-                  <span>{readingTime(post.content)} min read</span>
                 </div>
               </div>
             </div>
@@ -98,7 +96,25 @@ export default function PostPage({ params }: { params: Promise<{ slug: string }>
               </Button>
             )}
           </div>
+{/* 
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {post.tags.map((tag) => (
+                <Link key={tag.id} href={`/tag/${tag.slug}`}>
+                  <Badge variant="primary">{tag.name}</Badge>
+                </Link>
+              ))}
+            </div>
+          )} */}
+        </header>
 
+        
+
+        <div
+          className="prose prose-lg max-w-none mt-12 mb-16"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+        
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag) => (
@@ -108,15 +124,7 @@ export default function PostPage({ params }: { params: Promise<{ slug: string }>
               ))}
             </div>
           )}
-        </header>
-
-        <PostActions post={post} isAuthor={isAuthor} />
-
-        <div
-          className="prose prose-lg max-w-none mt-12 mb-16"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
+<PostActions post={post} isAuthor={isAuthor} />
         <div className="mt-16 pt-16 border-t">
           <CommentSection postId={post.id} />
         </div>

@@ -8,8 +8,6 @@ import { TrendingUp } from 'lucide-react';
 
 export default function TrendingPage() {
   const { data: posts, isLoading } = usePosts(true);
-
-  // Sort by likes count (trending)
   const trendingPosts = posts?.sort((a, b) => 
     (b._count?.likes || 0) - (a._count?.likes || 0)
   );

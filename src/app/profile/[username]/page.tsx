@@ -64,12 +64,18 @@ async function fetchUser(username: string) {
   return res.json();
 }
 
+// async function fetchUserPosts(username: string) {
+//   const res = await fetch(`/api/posts?username=${username}`);
+//   if (!res.ok) throw new Error("Failed to fetch posts");
+//   return res.json();
+// }
+
+// Fetches the user's posts from the new, dedicated /api/users/[username]/posts route
 async function fetchUserPosts(username: string) {
-  const res = await fetch(`/api/posts?username=${username}`);
+  const res = await fetch(`/api/users/${username}/posts`);
   if (!res.ok) throw new Error("Failed to fetch posts");
   return res.json();
 }
-
 export default function ProfilePage({
   params,
 }: {

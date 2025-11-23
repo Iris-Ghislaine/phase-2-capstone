@@ -1,46 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { generateSlug } from '@/lib/utils';
-
-// GET /api/posts - Fetch all posts
-export async function GET(request: Request) {
+// This GET function fetches ALL published posts for your main feed.
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const published = searchParams.get('published') !== 'false';
-    const authorId = searchParams.get('authorId');
-    const tag = searchParams.get('tag');
-    const search = searchParams.get('search');
-
-    const where: any = {};
-
-    if (published) {
-      where.published = true;
-    }
-
-    if (authorId) {
-      where.authorId = authorId;
-    }
-
-    if (tag) {
-      where.tags = {
-        some: {
-          slug: tag,
-        },
-      };
-    }
-
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { content: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-
     const posts = await prisma.post.findMany({
-      where,
+      where: {
+        published: true, // It only fetches posts that are marked as published
+      },
+      orderBy: {
+        publishedAt: 'desc', // Orders them by the most recent
+      },
       include: {
         author: {
           select: {
@@ -58,20 +31,86 @@ export async function GET(request: Request) {
           },
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
     });
 
     return NextResponse.json(posts);
   } catch (error) {
-    console.error('Fetch posts error:', error);
+    console.error('Fetch all posts error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
 }
+
+
+// // GET /api/posts - Fetch all posts
+// export async function GET(request: Request) {
+//   try {
+//     const { searchParams } = new URL(request.url);
+//     const published = searchParams.get('published') !== 'false';
+//     const authorId = searchParams.get('authorId');
+//     const tag = searchParams.get('tag');
+//     const search = searchParams.get('search');
+
+//     const where: any = {};
+
+//     if (published) {
+//       where.published = true;
+//     }
+
+//     if (authorId) {
+//       where.authorId = authorId;
+//     }
+
+//     if (tag) {
+//       where.tags = {
+//         some: {
+//           slug: tag,
+//         },
+//       };
+//     }
+
+//     if (search) {
+//       where.OR = [
+//         { title: { contains: search, mode: 'insensitive' } },
+//         { content: { contains: search, mode: 'insensitive' } },
+//       ];
+//     }
+
+//     const posts = await prisma.post.findMany({
+//       where,
+//       include: {
+//         author: {
+//           select: {
+//             id: true,
+//             name: true,
+//             username: true,
+//             avatar: true,
+//           },
+//         },
+//         tags: true,
+//         _count: {
+//           select: {
+//             likes: true,
+//             comments: true,
+//           },
+//         },
+//       },
+//       orderBy: {
+//         createdAt: 'desc',
+//       },
+//     });
+
+//     return NextResponse.json(posts);
+//   } catch (error) {
+//     console.error('Fetch posts error:', error);
+//     return NextResponse.json(
+//       { error: 'Internal server error' },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // POST /api/posts - Create new post
 export async function POST(request: Request) {
@@ -147,3 +186,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../../lib/prisma';
 
+// This GET function fetches all published posts for a SPECIFIC user.
 export async function GET(
   request: Request,
   { params }: { params: { username: string } }
@@ -9,22 +10,13 @@ export async function GET(
   try {
     const { username } = params;
 
-    // Find the user by their username to get their ID
-    const user = await prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    
+    // Find all posts where the author's username matches the one from the URL
     const posts = await prisma.post.findMany({
       where: {
-        authorId: user.id,
         published: true,
+        author: {
+          username: username,
+        },
       },
       orderBy: {
         publishedAt: 'desc',
@@ -57,4 +49,3 @@ export async function GET(
     );
   }
 }
-
