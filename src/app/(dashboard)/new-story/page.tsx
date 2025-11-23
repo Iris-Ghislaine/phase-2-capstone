@@ -114,13 +114,13 @@ if (!session) {
         />
 
         {/* Cover Image */}
-        {/* <div className="mb-8">
+        <div className="mb-8">
           <ImageUpload
             value={formData.coverImage}
             onChange={(url) => setFormData({ ...formData, coverImage: url })}
             label="Cover Image"
           />
-        </div> */}
+        </div>
 
         {/* Rich Text Editor */}
         <RichTextEditor
