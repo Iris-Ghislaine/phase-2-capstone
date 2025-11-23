@@ -285,47 +285,48 @@ CLOUDINARY_API_SECRET    # For server-side uploads
 
 # home page before logging in
 
-![alt text](image-3.png)
+![alt text](public/image-3.png)
+![alt text](public/image-1.png)
 
 # Sign In
 
-![alt text](image-4.png)
+![alt text](public/image-4.png)
 
 # Sign Up
 
-![alt text](image-5.png)
+![alt text](public/image-5.png)
 
 # home page after logging in
 
-![alt text](image-6.png)
+![alt text](public/image-6.png)
 
 ## fetching posts according to tags
 
-![alt text](image-2.png)
+![alt text](public/image-2.png)
 
 ## write section
 
-![alt text](image-7.png)
+![alt text](public/image-7.png)
 
 ## profile
 
-![alt text](image-8.png)
+![alt text](public/image-8.png)
 
 ## edit profile
 
-![alt text](image-9.png)
+![alt text](public/image-9.png)
 
 ## settings page
 
-![alt text](image-10.png)
+![alt text](public/image-10.png)
 
 ## Drafts page
 
-![alt text](image-11.png)
+![alt text](public/image-11.png)
 
 ## footer
 
-![alt text](image-12.png)
+![alt text](public/image-12.png)
 
 ## Testing
 
