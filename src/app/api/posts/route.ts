@@ -224,11 +224,196 @@
 //   }
 // }
 
+// import { NextResponse } from 'next/server';
+// import { getServerSession } from 'next-auth';
+// import { authOptions } from '@/lib/auth';
+// import { prisma } from '@/lib/prisma';
+// import { generateSlug, generateTagSlug } from '@/lib/utils'; // UPDATED IMPORT
+
+// export async function GET(request: Request) {
+//   try {
+//     const { searchParams } = new URL(request.url);
+//     const published = searchParams.get('published') !== 'false';
+//     const authorId = searchParams.get('authorId');
+//     const tag = searchParams.get('tag');
+//     const search = searchParams.get('search');
+//     const username = searchParams.get('username');
+
+//     const where: any = {};
+
+//     if (published) {
+//       where.published = true;
+//     }
+
+//     if (authorId) {
+//       where.authorId = authorId;
+//     }
+
+//     if (username) {
+//       const user = await prisma.user.findUnique({
+//         where: { username },
+//         select: { id: true },
+//       });
+//       if (user) {
+//         where.authorId = user.id;
+//       }
+//     }
+
+//     // Tag filtering
+//     if (tag) {
+//       const tagRecord = await prisma.tag.findUnique({
+//         where: { slug: tag.toLowerCase() },
+//         select: { id: true },
+//       });
+
+//       if (tagRecord) {
+//         where.tags = {
+//           some: {
+//             id: tagRecord.id,
+//           },
+//         };
+//       } else {
+//         return NextResponse.json([]);
+//       }
+//     }
+
+//     // Search functionality
+//     if (search) {
+//       where.OR = [
+//         { title: { contains: search, mode: 'insensitive' } },
+//         { content: { contains: search, mode: 'insensitive' } },
+//         { excerpt: { contains: search, mode: 'insensitive' } },
+//         {
+//           tags: {
+//             some: {
+//               name: { contains: search, mode: 'insensitive' }
+//             }
+//           }
+//         },
+//         {
+//           author: {
+//             name: { contains: search, mode: 'insensitive' }
+//           }
+//         }
+//       ];
+//     }
+
+//     const posts = await prisma.post.findMany({
+//       where,
+//       include: {
+//         author: {
+//           select: {
+//             id: true,
+//             name: true,
+//             username: true,
+//             avatar: true,
+//           },
+//         },
+//         tags: true,
+//         _count: {
+//           select: {
+//             likes: true,
+//             comments: true,
+//           },
+//         },
+//       },
+//       orderBy: {
+//         createdAt: 'desc',
+//       },
+//     });
+
+//     return NextResponse.json(posts);
+//   } catch (error) {
+//     console.error('Fetch posts error:', error);
+//     return NextResponse.json(
+//       { error: 'Internal server error' },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// export async function POST(request: Request) {
+//   try {
+//     const session = await getServerSession(authOptions);
+
+//     if (!session?.user) {
+//       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+//     }
+
+//     const body = await request.json();
+//     const { title, content, excerpt, coverImage, published, tags } = body;
+
+//     if (!title || !content) {
+//       return NextResponse.json(
+//         { error: 'Title and content are required' },
+//         { status: 400 }
+//       );
+//     }
+
+//     const slug = generateSlug(title); // For posts - with random suffix
+
+//     // Handle tags - FIXED: Use generateTagSlug without random suffix
+//     const tagConnections = [];
+//     if (tags && Array.isArray(tags)) {
+//       for (const tagName of tags) {
+//         const tagSlug = generateTagSlug(tagName); // FIXED: Use generateTagSlug
+        
+//         // Find or create tag
+//         const tag = await prisma.tag.upsert({
+//           where: { slug: tagSlug },
+//           update: {},
+//           create: { 
+//             name: tagName, 
+//             slug: tagSlug // FIXED: Clean slug without random suffix
+//           },
+//         });
+        
+//         tagConnections.push({ id: tag.id });
+//       }
+//     }
+
+//     const post = await prisma.post.create({
+//       data: {
+//         title,
+//         slug,
+//         content,
+//         excerpt,
+//         coverImage,
+//         published: published || false,
+//         publishedAt: published ? new Date() : null,
+//         authorId: (session.user as any).id,
+//         tags: {
+//           connect: tagConnections,
+//         },
+//       },
+//       include: {
+//         author: {
+//           select: {
+//             id: true,
+//             name: true,
+//             username: true,
+//             avatar: true,
+//           },
+//         },
+//         tags: true,
+//       },
+//     });
+
+//     return NextResponse.json(post, { status: 201 });
+//   } catch (error) {
+//     console.error('Create post error:', error);
+//     return NextResponse.json(
+//       { error: 'Internal server error' },
+//       { status: 500 }
+//     );
+//   }
+// }
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { generateSlug, generateTagSlug } from '@/lib/utils'; // UPDATED IMPORT
+import { generateSlug, generateTagSlug, normalizeTagName } from '@/lib/utils';
 
 export async function GET(request: Request) {
   try {
@@ -259,18 +444,28 @@ export async function GET(request: Request) {
       }
     }
 
-    // Tag filtering
+    // SMART TAG MATCHING - Works with existing data
     if (tag) {
-      const tagRecord = await prisma.tag.findUnique({
-        where: { slug: tag.toLowerCase() },
-        select: { id: true },
+      // Try to find tag by multiple methods
+      const normalizedTag = normalizeTagName(tag);
+      
+      // Find all tags that could match
+      const allTags = await prisma.tag.findMany({
+        select: { id: true, name: true, slug: true },
       });
 
-      if (tagRecord) {
+      // Find matching tags by normalized name or slug
+      const matchingTags = allTags.filter(t => 
+        normalizeTagName(t.name) === normalizedTag ||
+        t.slug.includes(tag.toLowerCase()) ||
+        normalizeTagName(t.slug) === normalizedTag
+      );
+
+      if (matchingTags.length > 0) {
         where.tags = {
           some: {
-            id: tagRecord.id,
-          },
+            id: { in: matchingTags.map(t => t.id) }
+          }
         };
       } else {
         return NextResponse.json([]);
@@ -350,25 +545,34 @@ export async function POST(request: Request) {
       );
     }
 
-    const slug = generateSlug(title); // For posts - with random suffix
+    const slug = generateSlug(title);
 
-    // Handle tags - FIXED: Use generateTagSlug without random suffix
+    // SMART TAG HANDLING - Reuses existing or creates new
     const tagConnections = [];
     if (tags && Array.isArray(tags)) {
       for (const tagName of tags) {
-        const tagSlug = generateTagSlug(tagName); // FIXED: Use generateTagSlug
+        const normalizedName = normalizeTagName(tagName);
         
-        // Find or create tag
-        const tag = await prisma.tag.upsert({
-          where: { slug: tagSlug },
-          update: {},
-          create: { 
-            name: tagName, 
-            slug: tagSlug // FIXED: Clean slug without random suffix
-          },
-        });
-        
-        tagConnections.push({ id: tag.id });
+        // First, check if similar tag exists
+        const allTags = await prisma.tag.findMany();
+        const existingTag = allTags.find(t => 
+          normalizeTagName(t.name) === normalizedName
+        );
+
+        if (existingTag) {
+          // Reuse existing tag
+          tagConnections.push({ id: existingTag.id });
+        } else {
+          // Create new tag with clean slug
+          const tagSlug = generateTagSlug(tagName);
+          const newTag = await prisma.tag.create({
+            data: { 
+              name: tagName, 
+              slug: tagSlug
+            },
+          });
+          tagConnections.push({ id: newTag.id });
+        }
       }
     }
 
