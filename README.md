@@ -142,8 +142,8 @@ rema-blog/
 │   ├── lib/                  # Utilities & configs
 │   ├── context/              # React Context providers
 │   └── types/                # TypeScript types
-├── public/                    # Static assets
-├── .env.local                # Environment variables (create this)
+├── public/                   # Static assets
+├── .env                      # Environment variables 
 ├── next.config.ts            # Next.js configuration
 ├── tailwind.config.js        # Tailwind CSS config
 └── package.json              # Dependencies
@@ -281,7 +281,7 @@ CLOUDINARY_API_SECRET    # For server-side uploads
 ### screenshots
 
 # home page
-
+![alt text](image-1.png)
 ## Testing
 
 ### Manual Testing Checklist
