@@ -38,7 +38,7 @@ export async function GET(request: Request) {
       // First, try to find the tag by slug
       const tagRecord = await prisma.tag.findUnique({
         where: { slug: tag.toLowerCase() },
-        select: { id: true },
+        // select: { id: true },
       });
 
       if (tagRecord) {
