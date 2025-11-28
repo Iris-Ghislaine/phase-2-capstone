@@ -20,7 +20,7 @@ export async function GET() {
       select: { followingId: true },
     });
 
-    const followingIds = following.map(f => f.followingId);
+    const followingIds = following.map((f: { followingId: string }) => f.followingId);
 
     if (followingIds.length === 0) {
       return NextResponse.json([]);
