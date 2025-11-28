@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useRef, useMemo } from 'react';
-import JoditEditor from 'jodit-react';
+import dynamic from 'next/dynamic';
+
+const JoditEditor = dynamic(() => import('jodit-react'), {
+  ssr: false,
+  loading: () => <div className="h-[500px] border border-gray-300 rounded-lg flex items-center justify-center">Loading editor...</div>
+});
 
 interface RichTextEditorProps {
   value: string;
@@ -20,7 +25,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
       toolbar: true,
       spellcheck: true,
       language: 'en',
-      toolbarButtonSize: 'large',
+      toolbarButtonSize: 'large' as const,
       toolbarAdaptive: false,
       showCharsCounter: true,
       showWordsCounter: true,

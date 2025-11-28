@@ -57,3 +57,11 @@ export interface Follow {
   followingId: string;
   createdAt: Date;
 }
+
+export interface FormData {
+  title: string;
+  content: string;
+  excerpt: string;
+  coverImage: string;
+  tags: string[];   // <-- important
+}

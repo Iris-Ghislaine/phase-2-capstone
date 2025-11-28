@@ -35,3 +35,5 @@ export async function uploadToCloudinary(
 
   return response.json();
 }
+
+//so we post our image data in formdata which cloudinary understand then it return in json format then we fetch response to upload the image successfully to our client side

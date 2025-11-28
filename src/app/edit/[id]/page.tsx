@@ -68,7 +68,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
         content: post.content,
         excerpt: post.excerpt || '',
         coverImage: post.coverImage || '',
-        tags: post.tags?.map((tag) => tag.name) || [],
+        tags: post.tags?.map((tag:any) => tag.name) || [],
         published: post.published || false,
       });
     }
@@ -105,7 +105,11 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
     updatePost(
       {
         id: postId,
-        data: { ...formData, published: false },
+        data: { 
+          ...formData, 
+          published: false,
+          tags: formData.tags
+        },
       },
       {
         onSuccess: () => {
@@ -134,7 +138,11 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
     updatePost(
       {
         id: postId,
-        data: { ...formData, published: true },
+        data: { 
+          ...formData, 
+          published: true,
+          tags: formData.tags
+        },
       },
       {
         onSuccess: (data) => {

@@ -140,6 +140,7 @@ export async function POST(request: Request) {
     const tagConnections = [];
     if (tags && Array.isArray(tags)) {
       for (const tagName of tags) {
+        if (typeof tagName !== 'string') continue;
         const normalizedName = normalizeTagName(tagName);
         
         // First, check if similar tag exists
@@ -153,7 +154,7 @@ export async function POST(request: Request) {
           tagConnections.push({ id: existingTag.id });
         } else {
           // Create new tag with clean slug
-          const tagSlug = generateTagSlug(tagName);
+          const tagSlug = generateTagSlug(String(tagName));
           const newTag = await prisma.tag.create({
             data: { 
               name: tagName, 

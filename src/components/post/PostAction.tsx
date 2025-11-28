@@ -19,7 +19,7 @@ export function PostActions({ post, isAuthor }: PostActionsProps) {
   const router = useRouter();
   const toast = useToast();
   const { mutate: toggleLike } = useToggleLike();
-  const { mutate: deletePost, isLoading: isDeleting } = useDeletePost();
+  const { mutate: deletePost, isPending: isDeleting } = useDeletePost();
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 

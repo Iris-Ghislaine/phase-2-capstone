@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma), // so NextAuth can store user/session data in the database
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -48,14 +48,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }) { //When login succeeds → store user details inside the token.
       if (user) {
         token.id = user.id;
         token.username = (user as any).username;
       }
-      return token;
+      return token;// This allows to access them later in front-end
     },
-    async session({ session, token }) {
+    async session({ session, token }) { // Converts JWT values into session.user
       if (session.user) {
         (session.user as any).id = token.id;
         (session.user as any).username = token.username;

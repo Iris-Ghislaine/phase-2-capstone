@@ -69,7 +69,7 @@ export function Header() {
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     className="flex items-center gap-2"
                   >
-                    <Avatar src={session.user?.image} size="md" />
+                    <Avatar src={session.user?.image || undefined} size="md" />
                   </button>
 
                   {isProfileOpen && (

@@ -47,7 +47,7 @@ export default function PostPage({ params }: { params: Promise<{ slug: string }>
     );
   }
 
-  const isAuthor = session && (session.user as any)?.id === post.authorId;
+  const isAuthor = Boolean(session && (session.user as any)?.id === post.authorId);
 
   return (
     <article className="min-h-screen bg-white">

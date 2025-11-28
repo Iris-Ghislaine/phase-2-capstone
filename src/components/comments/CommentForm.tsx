@@ -37,7 +37,7 @@ export function CommentForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex gap-4">
-        <Avatar src={session.user?.image} size="md" className="flex-shrink-0" />
+        <Avatar src={session.user?.image || undefined} size="md" className="flex-shrink-0" />
         <div className="flex-1">
           <Textarea
             value={content}
