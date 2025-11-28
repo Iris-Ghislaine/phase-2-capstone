@@ -111,7 +111,7 @@ export function Header() {
                           <button
                             onClick={() => {
                               setIsProfileOpen(false);
-                              signOut({ callbackUrl: '/' });
+                              signOut({ callbackUrl: typeof window !== 'undefined' ? window.location.origin : '/' });
                             }}
                             className="flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-50 transition-colors text-red-600"
                           >
