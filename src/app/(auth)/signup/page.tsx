@@ -9,6 +9,8 @@ import { Button } from '../../../components/ui/Button';
 import { useToast } from '../../../context/ToastContext';
 import { BookOpen } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default function SignupPage() {
   const router = useRouter();
   const toast = useToast();

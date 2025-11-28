@@ -16,8 +16,14 @@ export async function GET(request: Request) {
 
     const where: any = {};
 
-    if (published) {
+    // Check if any published posts exist
+    const hasPublishedPosts = await prisma.post.count({ where: { published: true } });
+    
+    if (published && hasPublishedPosts > 0) {
       where.published = true;
+    } else if (published && hasPublishedPosts === 0) {
+      // If no published posts, show all posts for development
+      console.log('No published posts found, showing all posts');
     }
 
     if (authorId) {
@@ -82,6 +88,13 @@ export async function GET(request: Request) {
       ];
     }
 
+    console.log('Posts query where:', where);
+    
+    // Check total posts in database
+    const totalPosts = await prisma.post.count();
+    const publishedPosts = await prisma.post.count({ where: { published: true } });
+    console.log(`Total posts: ${totalPosts}, Published: ${publishedPosts}`);
+    
     const posts = await prisma.post.findMany({
       where,
       include: {
@@ -106,6 +119,14 @@ export async function GET(request: Request) {
       },
     });
 
+    console.log('Posts found:', posts.length);
+    
+    // If no published posts but there are drafts, return info
+    if (posts.length === 0 && published) {
+      const drafts = await prisma.post.count({ where: { published: false } });
+      console.log(`No published posts found. Drafts available: ${drafts}`);
+    }
+    
     return NextResponse.json(posts);
   } catch (error) {
     console.error('Fetch posts error:', error);

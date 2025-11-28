@@ -6,6 +6,9 @@ import { Sidebar } from '../components/layouts/Sidebar';
 import { usePosts } from '../hooks/UsePosts';
 import { TrendingUp, Clock, Star } from 'lucide-react';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   const [filter, setFilter] = useState<'latest' | 'trending' | 'following'>('latest');
   const { data: posts, isLoading } = usePosts(true);
